@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="量尺"><meta name="theme-color" content="#14532d"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>量尺记录管理系统</title>
+<style>
+:root{--bg:#f2f2f7;--card:#fff;--tx:#1c1c1e;--dim:#6b7280;--bd:#e5e7eb;--g:#14532d;--ac:#0f766e;--red:#b91c1c;--amb:#b45309;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f0f0f;--card:#1a1a1a;--tx:#f0f0f0;--dim:#9ca3af;--bd:#2d2d2d;--ac:#2dd4bf;--g:#166534;--red:#f87171;--amb:#fbbf24}}
+:root[data-theme="dark"]{--bg:#0f0f0f;--card:#1a1a1a;--tx:#f0f0f0;--dim:#9ca3af;--bd:#2d2d2d;--ac:#2dd4bf;--g:#166534;--red:#f87171;--amb:#fbbf24}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+#app{max-width:768px;margin:0 auto;padding:16px 16px 40px}
+@media(min-width:1024px){#app{max-width:1024px}}
+input,select,textarea,button{font:inherit;color:inherit}
+input[type=text],input[type=tel],input[type=date],input[type=search],select{width:100%;padding:10px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--card);font-size:16px}
+button{cursor:pointer}
+.btn{border:1px solid var(--bd);background:var(--card);border-radius:10px;padding:10px 16px;min-height:44px}
+.btn.p{background:var(--g);color:#fff;border-color:var(--g);font-weight:600}
+.btn.d{border-color:var(--red);color:var(--red)}
+.btn:disabled{opacity:.6}
+.row{display:flex;gap:8px;align-items:center}
+.grid{display:grid;gap:12px}
+.cards{display:grid;gap:12px;grid-template-columns:1fr}
+@media(min-width:1024px){.cards{grid-template-columns:1fr 1fr}}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:12px;display:flex;gap:12px;cursor:pointer}
+.thumb{width:80px;height:80px;border-radius:10px;object-fit:cover;flex:none}
+.addr{font-weight:700;font-size:18px;word-break:break-word}
+.badge{display:inline-block;border-radius:999px;padding:1px 10px;font-size:12px;font-weight:700;margin-left:6px;vertical-align:middle}
+.sub{color:var(--dim);font-size:14px}
+.small{font-size:13px;color:var(--dim);margin-top:4px}
+.dim{color:var(--dim)}.red{color:var(--red)}.amb{color:var(--amb)}
+h3{border-bottom:2px solid var(--g);padding-bottom:4px;margin:24px 0 12px;font-size:16px}
+.f{display:grid;gap:12px;grid-template-columns:1fr}
+@media(min-width:640px){.f{grid-template-columns:1fr 1fr}.span2{grid-column:span 2}}
+label{display:block;font-size:12px;color:var(--dim);margin-bottom:4px}
+.chk{display:flex;gap:8px;align-items:center;font-size:16px;color:var(--tx);min-height:44px}
+.chk input{width:22px;height:22px}
+.hint{font-size:12px;color:var(--dim);margin-top:4px}
+dl{display:grid;gap:12px;grid-template-columns:1fr 1fr;margin:0}
+@media(min-width:1024px){dl{grid-template-columns:1fr 1fr 1fr}dl.c4{grid-template-columns:repeat(4,1fr)}}
+dt{font-size:12px;color:var(--dim)}dd{margin:0;word-break:break-word;white-space:pre-wrap}
+dl.c1{grid-template-columns:1fr}@media(min-width:640px){dl.c1{grid-template-columns:1fr 1fr}}
+a.tel{color:var(--ac);text-decoration:underline}
+.photos{display:grid;gap:12px;grid-template-columns:1fr 1fr}
+@media(min-width:640px){.photos{grid-template-columns:1fr 1fr 1fr}}
+.ph{position:relative;aspect-ratio:4/3;border-radius:10px;border:1px solid var(--bd);overflow:hidden;background:var(--card);display:flex;align-items:center;justify-content:center;color:var(--dim);font-size:14px}
+.ph img{width:100%;height:100%;object-fit:cover;cursor:zoom-in}
+.mask{position:absolute;inset:0;background:rgba(0,0,0,.55);color:#fff;display:flex;align-items:center;justify-content:center}
+.bar{position:sticky;bottom:0;display:flex;gap:8px;padding:12px 0;background:var(--bg);margin-top:16px}
+.bar .p{flex:1;height:48px}
+.mod{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:16px;z-index:20}
+.mod>div{background:var(--card);border-radius:14px;padding:20px;max-width:420px;width:100%}
+.lb{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:30;display:flex;align-items:center;justify-content:center}
+.lb img{max-width:100%;max-height:100%}
+.lb button{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));right:16px;background:none;border:0;color:#fff;font-size:34px}
+.err{color:var(--red);margin-top:8px}
+.center{text-align:center;padding:40px 0;color:var(--dim)}
+</style>
+</head>
+<body>
+<div id="app"><div class="center">加载中…</div></div>
+<script>
+const PT=["厨房","浴室","其他"];
+const ST=["已量尺","已报价","生产中","待交付","已交付","已安装"];
+const SC={"已量尺":["#e0e7ff","#3730a3"],"已报价":["#fef3c7","#92400e"],"生产中":["#ffedd5","#9a3412"],"待交付":["#fce7f3","#9d174d"],"已交付":["#dcfce7","#166534"],"已安装":["#14532d","#ffffff"]};
+const SLOTS=[["site1","工地照片 1"],["site2","工地照片 2"],["site3","工地照片 3"],["site4","工地照片 4"],["site5","工地照片 5"],["drawing","量尺图照片"]];
+const MIMES=["image/jpeg","image/png","image/webp","image/gif"];
+const TXT=["address","customer","contractor","phone1","phone2","projectType","status","measuredBy","measureDate","expectedDelivery","doorMaterial","countertopMaterial","sinkType","handleModel","ceilingHeight","fridge","stove","dishwasher","microwave","note1","note2"];
+const BOOL=["countertopByUs","handleChosen","needRecheck"];
+const LBL={customer:"客户",contractor:"Contractor",phone1:"电话 1",phone2:"电话 2",projectType:"项目类型",measuredBy:"量尺人",measureDate:"量尺日期",expectedDelivery:"预计交付日期",ceilingHeight:"天花高度",doorMaterial:"门板材料 / 颜色",countertopMaterial:"台面材质",sinkType:"水槽",handleModel:"拉手型号",fridge:"冰箱",stove:"炉头",dishwasher:"洗碗机",microwave:"微波炉",note1:"备注 1",note2:"备注 2"};
+const PH={address:"如 3630 Cambridge St, Vancouver",ceilingHeight:"如 8 ft / 96 in（影响吊柜与封顶）",doorMaterial:"如 SS105、AGT Soft White",countertopMaterial:"如 石英石 / 岩板 / 不锈钢",sinkType:"如 台下盆双槽（影响台面开孔）",fridge:"如 36 in 对开门，型号…",stove:"如 30 in 燃气灶（务必注明燃气 / 电）",dishwasher:"如 24 in 标准款",microwave:"如 30 in 悬挂式 OTR"};
+const $app=document.getElementById("app");
+let assets=null,recs=[],loaded=false,loadErr=false,view={n:"list"},q="",fs="全部",lb=null,busy={},mod=null,formErr="";
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+const photoUrl=(r,k)=>r.photos&&r.photos[k]?r.photos[k].url:null;
+
+function deliveryInfo(r){
+  const e=r.expectedDelivery;
+  if(!e||!/^\d{4}-\d{2}-\d{2}$/.test(e))return null;
+  const due=new Date(e+"T00:00:00");if(isNaN(due))return null;
+  const t=new Date();t.setHours(0,0,0,0);
+  const days=Math.round((due-t)/86400000),b="预计交付 "+e;
+  if(r.status==="已交付"||r.status==="已安装")return{t:b,c:"dim"};
+  if(days<0)return{t:b+" · 已逾期 "+(-days)+" 天",c:"red"};
+  if(days===0)return{t:b+" · 今天交付",c:"amb"};
+  if(days<=7)return{t:b+" · 还剩 "+days+" 天",c:"amb"};
+  return{t:b,c:"dim"};
+}
+const badge=s=>{const c=SC[s]||SC["已量尺"];return `<span class="badge" style="background:${c[0]};color:${c[1]}">${esc(s)}</span>`};
+const blank=()=>{const o={};TXT.forEach(k=>o[k]="");BOOL.forEach(k=>o[k]=false);o.projectType="厨房";o.status="已量尺";o.measureDate=today();return o};
+
+
+// ===== 本地存储（IndexedDB）：数据只存在这台设备的浏览器里 =====
+let idb=null;const urls={};
+function openDB(){return new Promise((res,rej)=>{const r=indexedDB.open("liangchi",1);r.onupgradeneeded=()=>{const d=r.result;d.createObjectStore("records",{keyPath:"id"});d.createObjectStore("photos",{keyPath:"key"})};r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+const tx=(st,mode,fn)=>new Promise((res,rej)=>{const t=idb.transaction(st,mode);let out;const r=fn(t);if(r)r.onsuccess=()=>{out=r.result};t.oncomplete=()=>res(out);t.onerror=()=>rej(t.error);t.onabort=()=>rej(t.error)});
+const strip=r=>{const c={...r,photos:{}};for(const k in (r.photos||{}))c.photos[k]={id:r.photos[k].id};return c};
+const saveRec=r=>tx("records","readwrite",t=>t.objectStore("records").put(strip(r)));
+function urlFor(key,blob){if(!urls[key])urls[key]=URL.createObjectURL(blob);return urls[key]}
+function sortRecs(){recs.sort((a,b)=>(b.updatedAt-a.updatedAt)||(b.id-a.id))}
+function notify(){sortRecs();render()}
+const ref=id=>({
+  async set(o){recs.push(o);await saveRec(o);notify()},
+  async update(p){const r=byId(id);if(!r)return;for(const k in p){if(k.startsWith("photos.")){r.photos=r.photos||{};r.photos[k.slice(7)]=p[k]}else r[k]=p[k]}await saveRec(r);notify()},
+  async delete(){recs=recs.filter(r=>r.id!==id);await tx("records","readwrite",t=>t.objectStore("records").delete(id));notify()}
+});
+assets={
+  async upload(file){const key="p"+Date.now()+"_"+Math.random().toString(36).slice(2,8);await tx("photos","readwrite",t=>t.objectStore("photos").put({key,blob:file}));return{id:key,url:urlFor(key,file)}},
+  async delete(key){await tx("photos","readwrite",t=>t.objectStore("photos").delete(key));if(urls[key]){URL.revokeObjectURL(urls[key]);delete urls[key]}}
+};
+async function init(){
+  try{
+    idb=await openDB();
+    const rows=await tx("records","readonly",t=>t.objectStore("records").getAll());
+    const ph=await tx("photos","readonly",t=>t.objectStore("photos").getAll());
+    const pm={};ph.forEach(p=>pm[p.key]=p.blob);
+    rows.forEach(r=>{const o={};for(const k in (r.photos||{})){const key=r.photos[k].id;if(pm[key])o[k]={id:key,url:urlFor(key,pm[key])}}r.photos=o});
+    recs=rows;sortRecs();loaded=true;loadErr=false;render();
+    try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+  }catch(e){loaded=true;loadErr=true;render()}
+}
+const byId=id=>recs.find(r=>r.id===id);
+const nextId=()=>recs.reduce((m,r)=>Math.max(m,r.id),0)+1;
+
+function render(){
+  if(view.n==="list")return list();
+  if(view.n==="detail")return detail();
+  return form();
+}
+function go(v){view=v;formErr="";scrollTo(0,0);render()}
+
+function list(){
+  let h=`<div class="row"><input type="search" id="q" placeholder="搜索地址 / 客户 / Contractor / 电话" value="${esc(q)}"><button class="btn p" id="new" style="white-space:nowrap">＋ 新建</button></div>
+  <div class="row" style="margin:12px 0"><span class="sub">状态</span><select id="fs" style="width:auto">${["全部",...ST].map(s=>`<option ${s===fs?"selected":""}>${s}</option>`).join("")}</select><span class="sub" id="cnt" style="margin-left:auto"></span></div><div id="lst"></div>`;
+  $app.innerHTML=h;
+  document.getElementById("new").onclick=()=>go({n:"new"});
+  document.getElementById("q").oninput=e=>{q=e.target.value;fill()};
+  document.getElementById("fs").onchange=e=>{fs=e.target.value;fill()};
+  fill();
+}
+function fill(){
+  const L=document.getElementById("lst");if(!L)return;
+  const qq=q.trim().toLowerCase();
+  const rows=recs.filter(r=>(fs==="全部"||r.status===fs)&&(!qq||[r.address,r.customer,r.contractor,r.phone1,r.phone2].join(" ").toLowerCase().includes(qq)));
+  document.getElementById("cnt").textContent=loaded&&!loadErr?"共 "+rows.length+" 条":"";
+  if(!loaded){L.innerHTML='<div class="center">加载中…</div>';return}
+  if(loadErr){L.innerHTML='<div class="center">加载失败<br><br><button class="btn" id="rt">重试</button></div>';document.getElementById("rt").onclick=()=>location.reload();return}
+  if(!recs.length){L.innerHTML='<div class="center"><b>还没有量尺记录</b><br>点右上角「＋ 新建」，录入第一条量尺记录。</div>';return}
+  if(!rows.length){L.innerHTML='<div class="center">没有符合搜索 / 筛选条件的记录</div>';return}
+  L.innerHTML='<div class="cards">'+rows.map(r=>{
+    const th=SLOTS.slice(0,5).map(s=>photoUrl(r,s[0])).find(Boolean);
+    const n=SLOTS.filter(s=>photoUrl(r,s[0])).length;
+    const di=deliveryInfo(r);
+    const sub=[r.customer,r.contractor,r.projectType].filter(Boolean).join(" · ")||"—";
+    const parts=["量尺 "+(r.measureDate||"—"),di?`<span class="${di.c}">${esc(di.t)}</span>`:"—"];
+    if(r.needRecheck)parts.push('<b class="amb">需复尺</b>');
+    if(n)parts.push("照片 "+n+" 张");
+    return `<div class="card" data-id="${r.id}">${th?`<img class="thumb" src="${esc(th)}" alt="">`:""}<div style="min-width:0"><div><span class="addr">${esc(r.address)}</span>${badge(r.status)}</div><div class="sub">${esc(sub)}</div><div class="small">${parts.join(" / ")}</div></div></div>`}).join("")+"</div>";
+  L.querySelectorAll(".card").forEach(c=>c.onclick=()=>go({n:"detail",id:+c.dataset.id}));
+}
+
+function detail(){
+  const r=byId(view.id);
+  if(!r){$app.innerHTML='<p><a href="#" id="bk">← 返回列表</a></p><div class="center">这条记录已不存在<br><br><button class="btn" id="bk2">返回列表</button></div>';document.getElementById("bk").onclick=e=>{e.preventDefault();go({n:"list"})};document.getElementById("bk2").onclick=()=>go({n:"list"});return}
+  const di=deliveryInfo(r);
+  const v=(k)=>{const x=r[k];if(typeof x==="boolean")return x?"是":"否";if(!x)return"—";if(k==="phone1"||k==="phone2")return `<a class="tel" href="tel:${esc(x)}">${esc(x)}</a>`;return esc(x)};
+  const dl=(ks,c)=>`<dl class="${c||""}">`+ks.map(k=>`<div><dt>${LBL[k]||k}</dt><dd>${v(k)}</dd></div>`).join("")+"</dl>";
+  const T=(t)=>`<h3>${t}</h3>`;
+  const ph=SLOTS.filter(s=>photoUrl(r,s[0]));
+  $app.innerHTML=`<p style="margin:0 0 8px"><a href="#" id="bk" style="color:var(--ac)">← 返回列表</a></p>
+  <div><span style="font-size:20px;font-weight:700;word-break:break-word">${esc(r.address)}</span>${badge(r.status)}</div>
+  <div style="margin-top:6px" class="${di?di.c:"dim"}">${di?esc(di.t):"—"}</div>
+  ${r.needRecheck?'<div class="amb" style="font-weight:700">⚠ 需复尺</div>':""}
+  <div style="margin:10px 0"><label>更改状态</label><select id="st">${ST.map(s=>`<option ${s===r.status?"selected":""}>${s}</option>`).join("")}</select></div>
+  ${T("基本信息")}${dl(["customer","contractor","phone1","phone2","projectType","measuredBy","measureDate","expectedDelivery","ceilingHeight"])}
+  ${T("柜体与五金")}<dl><div><dt>门板材料 / 颜色</dt><dd>${v("doorMaterial")}</dd></div><div><dt>台面材质</dt><dd>${v("countertopMaterial")}</dd></div><div><dt>台面由我方提供</dt><dd>${v("countertopByUs")}</dd></div><div><dt>水槽</dt><dd>${v("sinkType")}</dd></div><div><dt>拉手已选</dt><dd>${v("handleChosen")}</dd></div><div><dt>拉手型号</dt><dd>${v("handleModel")}</dd></div></dl>
+  ${T("电器")}${dl(["fridge","stove","dishwasher","microwave"],"c4")}
+  ${T("备注")}${dl(["note1","note2"],"c1")}
+  ${T("照片")}${ph.length?'<div class="photos">'+ph.map(s=>`<div><div class="ph"><img src="${esc(photoUrl(r,s[0]))}" data-u="${esc(photoUrl(r,s[0]))}" alt=""></div><div class="small">${s[1]}</div></div>`).join("")+"</div>":'<div class="dim">暂无照片</div>'}
+  <div class="row" style="margin-top:24px"><button class="btn p" id="ed" style="flex:1">编辑 / 管理照片</button><button class="btn d" id="del">删除记录</button></div>`;
+  document.getElementById("bk").onclick=e=>{e.preventDefault();go({n:"list"})};
+  document.getElementById("ed").onclick=()=>go({n:"edit",id:r.id});
+  document.getElementById("st").onchange=async e=>{await ref(r.id).update({status:e.target.value,updatedAt:Date.now()})};
+  document.getElementById("del").onclick=()=>{mod={id:r.id,addr:r.address,busy:false};modal()};
+  $app.querySelectorAll(".ph img").forEach(i=>i.onclick=()=>lightbox(i.dataset.u));
+}
+function modal(){
+  document.querySelector(".mod")?.remove();
+  if(!mod)return;
+  const m=document.createElement("div");m.className="mod";
+  m.innerHTML=`<div><b style="font-size:18px">确定删除这条记录？</b><p>「${esc(mod.addr)}」的全部信息和照片都会被删除，无法恢复。</p><div class="row"><button class="btn d" id="yes" style="flex:1" ${mod.busy?"disabled":""}>${mod.busy?"删除中…":"确认删除"}</button><button class="btn" id="no" style="flex:1" ${mod.busy?"disabled":""}>取消</button></div></div>`;
+  document.body.appendChild(m);
+  m.querySelector("#no").onclick=()=>{mod=null;modal()};
+  m.querySelector("#yes").onclick=async()=>{
+    mod.busy=true;modal();
+    const r=byId(mod.id);
+    try{
+      if(r&&assets)for(const s of SLOTS){const p=r.photos&&r.photos[s[0]];if(p){try{await assets.delete(p.id)}catch(e){}}}
+      await ref(mod.id).delete();
+    }catch(e){}
+    mod=null;modal();go({n:"list"});
+  };
+}
+function lightbox(u){
+  const d=document.createElement("div");d.className="lb";
+  d.innerHTML=`<button aria-label="关闭">×</button><img src="${esc(u)}" alt="">`;
+  d.onclick=e=>{if(e.target.tagName!=="IMG")d.remove()};
+  document.body.appendChild(d);
+}
+
+function form(){
+  const edit=view.n==="edit",r=edit?byId(view.id):null;
+  if(edit&&!r){go({n:"list"});return}
+  const d=edit?r:blank();
+  const inp=(k,type,span)=>`<div class="${span?"span2":""}"><label>${LBL[k]||"地址"}${k==="address"?" *":""}</label><input type="${type||"text"}" data-k="${k}" value="${esc(d[k])}" placeholder="${esc(PH[k]||"")}"></div>`;
+  const sel=(k,o)=>`<div><label>${LBL[k]||"状态"}</label><select data-k="${k}">${o.map(x=>`<option ${x===d[k]?"selected":""}>${x}</option>`).join("")}</select></div>`;
+  const ck=(k,t)=>`<label class="chk"><input type="checkbox" data-k="${k}" ${d[k]?"checked":""}>${t}</label>`;
+  $app.innerHTML=`<h2 style="font-size:20px;margin:0">${edit?"编辑："+esc(r.address):"新建量尺记录"}</h2>
+  <h3>基本信息</h3><div class="f">${inp("address","text",1)}${inp("customer")}${inp("contractor")}${inp("phone1","tel")}${inp("phone2","tel")}${sel("projectType",PT)}${sel("status",ST)}${inp("measuredBy")}${inp("measureDate","date")}${inp("expectedDelivery","date")}${inp("ceilingHeight")}${ck("needRecheck","需复尺")}</div>
+  <h3>柜体与五金</h3><div class="f">${inp("doorMaterial")}${inp("countertopMaterial")}${ck("countertopByUs","台面由我方提供")}${inp("sinkType")}${ck("handleChosen","拉手已选")}${inp("handleModel")}</div>
+  <h3>电器</h3><div class="f">${inp("fridge")}<div>${inp("stove").replace(/^<div class="">|<\/div>$/g,"")}<div class="hint">燃气还是电，影响开孔和管线</div></div>${inp("dishwasher")}${inp("microwave")}</div>
+  <h3>备注</h3><div class="grid">${inp("note1")}${inp("note2")}</div>
+  <h3>照片</h3>${edit?'<div class="photos" id="phs"></div>':'<div class="dim">照片（工地照片 5 张 + 量尺图）在保存记录后添加：保存完点开这条记录 → 编辑，即可逐张上传。</div>'}
+  <div class="err" id="err">${esc(formErr)}</div>
+  <div class="bar"><button class="btn p" id="sv">保存</button><button class="btn" id="cc">取消</button></div>`;
+  if(edit)photos();
+  const back=()=>go(edit?{n:"detail",id:view.id}:{n:"list"});
+  document.getElementById("cc").onclick=back;
+  document.getElementById("sv").onclick=async e=>{
+    const o={};
+    $app.querySelectorAll("[data-k]").forEach(el=>{o[el.dataset.k]=el.type==="checkbox"?el.checked:el.value});
+    TXT.forEach(k=>{o[k]=(o[k]||"").trim()});
+    if(!o.address){document.getElementById("err").textContent="地址必填";return}
+    ["measureDate","expectedDelivery"].forEach(k=>{if(!/^\d{4}-\d{2}-\d{2}$/.test(o[k]))o[k]=""});
+    e.target.disabled=true;e.target.textContent="保存中…";
+    try{
+      if(edit)await ref(view.id).update({...o,updatedAt:Date.now()});
+      else{const id=nextId(),t=Date.now();await ref(id).set({id,...o,photos:{},createdAt:t,updatedAt:t})}
+      back();
+    }catch(x){e.target.disabled=false;e.target.textContent="保存";document.getElementById("err").textContent="保存失败，请重试"}
+  };
+}
+function photos(){
+  const box=document.getElementById("phs");if(!box)return;
+  const r=byId(view.id);if(!r)return;
+  box.innerHTML=SLOTS.map(s=>{const u=photoUrl(r,s[0]);const b=busy[view.id+s[0]];
+    return `<div><div class="ph">${u?`<img src="${esc(u)}" alt="">`:"暂无照片"}${b?'<div class="mask">处理中…</div>':""}</div><div class="small">${s[1]}</div><div class="row" style="margin-top:6px"><button class="btn" data-up="${s[0]}">${u?"换一张":"添加照片"}</button>${u?`<button class="btn d" data-rm="${s[0]}">删除</button>`:""}</div></div>`}).join("");
+  box.querySelectorAll("[data-up]").forEach(b=>b.onclick=()=>{
+    const f=document.createElement("input");f.type="file";f.accept="image/*";
+    f.onchange=()=>f.files[0]&&upload(b.dataset.up,f.files[0]);f.click()});
+  box.querySelectorAll("[data-rm]").forEach(b=>b.onclick=()=>remove(b.dataset.rm));
+}
+async function compress(file){
+  // 长边最多 1600px，JPEG 质量 0.7：看得清现场和手写数字，一张约 150–400KB
+  try{
+    let bmp;
+    try{bmp=await createImageBitmap(file,{imageOrientation:"from-image"})}catch(e){bmp=await createImageBitmap(file)}
+    const sc=Math.min(1,1600/Math.max(bmp.width,bmp.height));
+    const w=Math.max(1,Math.round(bmp.width*sc)),h=Math.max(1,Math.round(bmp.height*sc));
+    const c=document.createElement("canvas");c.width=w;c.height=h;
+    const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,w,h);x.drawImage(bmp,0,0,w,h);
+    const blob=await new Promise(r=>c.toBlob(r,"image/jpeg",0.7));
+    return blob&&blob.size<file.size?blob:file;
+  }catch(e){return file}
+}
+async function upload(slot,file){
+  const err=document.getElementById("err");
+  if(!MIMES.includes(file.type)){err.textContent="只支持 JPG / PNG / WebP / GIF 图片";return}
+  if(!assets){err.textContent="无法保存照片";return}
+  err.textContent="";const id=view.id,k=id+slot;busy[k]=1;photos();
+  try{
+    const res=await assets.upload(await compress(file));
+    const r=byId(id),old=r.photos&&r.photos[slot];
+    await ref(id).update({["photos."+slot]:{id:res.id,url:res.url},updatedAt:Date.now()});
+    if(old)try{await assets.delete(old.id)}catch(e){}
+  }catch(e){err.textContent="上传失败，请重试"}
+  delete busy[k];setTimeout(photos,50);
+}
+async function remove(slot){
+  const id=view.id,k=id+slot,r=byId(id),old=r.photos&&r.photos[slot];if(!old)return;
+  busy[k]=1;photos();
+  try{
+    const p={...(r.photos||{})};delete p[slot];
+    await ref(id).update({photos:p,updatedAt:Date.now()});
+    if(assets)try{await assets.delete(old.id)}catch(e){}
+  }catch(e){document.getElementById("err").textContent="删除失败，请重试"}
+  delete busy[k];setTimeout(photos,50);
+}
+// 数据变化时：编辑页只刷新照片区，避免打断输入
+const _render=render;
+render=function(){if(view.n==="edit"&&document.getElementById("phs")){photos();return}_render()};
+render();init();
+</script>
+</body>
+</html>
